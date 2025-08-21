@@ -1,0 +1,67 @@
+import os
+
+class TodoList:
+    def __init__(self, filename='todolist.txt'):
+        self.tasks = []
+        self.filename = filename
+        self.load_tasks()
+
+    def load_tasks(self):
+        if os.path.exists(self.filename):
+            with open(self.filename, 'r') as file:
+                self.tasks = [line.strip() for line in file.readlines()]
+
+    def save_tasks(self):
+        with open(self.filename, 'w') as file:
+            for task in self.tasks:
+                file.write(task + '\n')
+
+    def add_task(self, task):
+        self.tasks.append(task)
+        self.save_tasks()
+        print(f'Задача "{task}" добавлена.')
+
+    def remove_task(self, task):
+        if task in self.tasks:
+            self.tasks.remove(task)
+            self.save_tasks()
+            print(f'Задача "{task}" удалена.')
+        else:
+            print(f'Задача "{task}" не найдена.')
+
+    def show_tasks(self):
+        if not self.tasks:
+            print("Список дел пуст.")
+        else:
+            print("Список дел:")
+            for index, task in enumerate(self.tasks, start=1):
+                print(f"{index}. {task}")
+
+def main():
+    todo = TodoList()
+    
+    while True:
+        print("\nВыберите действие:")
+        print("1. Добавить задачу")
+        print("2. Удалить задачу")
+        print("3. Показать задачи")
+        print("4. Выйти")
+
+        choice = input("Введите номер действия: ")
+
+        if choice == '1':
+            task = input("Введите задачу: ")
+            todo.add_task(task)
+        elif choice == '2':
+            task = input("Введите задачу для удаления: ")
+            todo.remove_task(task)
+        elif choice == '3':
+            todo.show_tasks()
+        elif choice == '4':
+            print("Выход из программы.")
+            break
+        else:
+            print("Неверный ввод. Пожалуйста, попробуйте снова.")
+
+if __name__ == "__main__":
+    main()
